@@ -20,9 +20,9 @@ const Header = props => {
                     {currentUser ? (
                         <ul>
                             <li>
-                                <span onClick={() => auth.signOut()}>
+                                <a onClick={() => auth.signOut()}>
                                     Log Out
-                                    </span>
+                                    </a>
                             </li>
                         </ul>
                     ) : (
