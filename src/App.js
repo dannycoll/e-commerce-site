@@ -4,8 +4,10 @@ import { Switch, Route } from 'react-router-dom';
 
 import MainLayout from './layouts/MainLayout';
 import HomepageLayout from "./layouts/HomepageLayout";
+
 import Homepage from './pages/Homepage';
 import Registration from './pages/Registration';
+import Login from './pages/Login';
 
 function App() {
   return (
@@ -14,11 +16,18 @@ function App() {
         <Route exact path={'/'} render={() => (
           <HomepageLayout>
             <Homepage />
-          </HomepageLayout>)}/>
+          </HomepageLayout>
+          )}/>
         <Route path={'/registration'} render={() => (
           <MainLayout>
             <Registration />
-          </MainLayout>)}/>
+          </MainLayout>
+          )}/>
+        <Route path={'/login'} render={() => (
+          <MainLayout>
+            <Login />
+          </MainLayout>
+        )}/>
       </Switch>
     </div>
   );
