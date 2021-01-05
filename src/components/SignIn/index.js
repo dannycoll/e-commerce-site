@@ -5,6 +5,7 @@ import Button from './../forms/Button';
 import { auth, signInWithGoogle } from './../../firebase/utils';
 import FormInput from './../forms/FormInput';
 import AuthWrapper from './../AuthWrapper';
+import { Link } from 'react-router-dom';
 
 const initialState = {
     email: '',
@@ -75,6 +76,12 @@ class SignIn extends Component {
                                         Sign in with Google
                                     </Button>
                                 </div>
+                            </div>
+
+                            <div className="links">
+                                <Link to='/recovery'>
+                                    Forgot Password?
+                                </Link>
                             </div>
                         </form>
                     </div>
