@@ -23,7 +23,7 @@ const EmailPassword = props => {
 			}
 			await auth.sendPasswordResetEmail(email, config)
 				.then(() => {
-					this.props.history.push('/login');
+					props.history.push('/login');
 				})
 				.catch(() => {
 					const error = ['Email not found. Please try again.'];
