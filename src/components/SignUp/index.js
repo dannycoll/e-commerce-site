@@ -79,14 +79,14 @@ const SignUp = props => {
             name="password"
             value={password}
             placeholder="Password"
-            onChange={e => setPassword(e.target.value)}
+            handleChange={e => setPassword(e.target.value)}
           />
           <FormInput
             type="password"
             name="confirmPassword"
             value={confirmPassword}
             placeholder="Confirm Password"
-            onChange={e => setConfirmPassword(e.target.value)}
+            handleChange={e => setConfirmPassword(e.target.value)}
           />
 
           <Button type="submit">

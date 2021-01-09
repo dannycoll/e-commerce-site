@@ -7,11 +7,6 @@ import FormInput from './../forms/FormInput';
 import AuthWrapper from './../AuthWrapper';
 import { Link } from 'react-router-dom';
 
-const initialState = {
-    email: '',
-    password: ''
-};
-
 const SignIn = props => {
 
     const [email, setEmail] = useState('');
