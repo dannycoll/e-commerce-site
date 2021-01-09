@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { withRouter } from "react-router-dom";
 import './styles.scss';
 
 import { auth, handleUserProfile } from './../../firebase/utils';
@@ -36,6 +37,7 @@ const SignUp = props => {
       await handleUserProfile(user, { displayName });
 
       resetForm();
+      props.history.push('/');
     } catch (e) {
       console.log(e);
     }
@@ -99,4 +101,4 @@ const SignUp = props => {
 }
 
 
-export default SignUp;
+export default withRouter(SignUp);
