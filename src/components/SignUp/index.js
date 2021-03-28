@@ -1,19 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withRouter } from "react-router-dom";
 import './styles.scss';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { auth, handleUserProfile } from './../../firebase/utils';
+import { resetAllAuthForms, signUpUser } from './../../redux/User/user.actions';
 
 import FormInput from './../forms/FormInput';
 import Button from './../forms/Button';
 import AuthWrapper from './../AuthWrapper';
 
+const mapState = ({ user }) => ({
+  signUpSuccess: user.signUpSuccess,
+  signUpError: user.signUpError,
+});
+
 const SignUp = props => {
+  const { signUpSuccess, signUpError } = useSelector(mapState)
+  const dispatch = useDispatch();
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState([]);
+
+  useEffect(() => {
+    if (signUpSuccess) {
+      resetForm();
+      props.history.push('/');
+    }
+  }, [signUpSuccess]);
+
+  useEffect(() => {
+    if (Array.isArray(signUpError) && signUpError.length >= 1) {
+      setErrors(signUpError);
+    }
+  }, [signUpError]);
 
   const resetForm = () => {
     setDisplayName('');
@@ -22,25 +43,17 @@ const SignUp = props => {
     setErrors([]);
     setPassword('');
   }
-  const handleFormSubmit = async e => {
+  const handleFormSubmit = e => {
     e.preventDefault();
-
-    if (password !== confirmPassword) {
-      const error = ['Passwords Don\'t Match'];
-      setErrors(error)
-      return;
-    }
-
-    try {
-      const { user } = await auth.createUserWithEmailAndPassword(email, password);
-
-      await handleUserProfile(user, { displayName });
-
-      resetForm();
-      props.history.push('/');
-    } catch (e) {
-      console.log(e);
-    }
+    dispatch(signUpUser({
+      displayName,
+      email,
+      password,
+      confirmPassword,
+    }));
+    resetForm();
+    dispatch(resetAllAuthForms());
+    props.history.push('/');   
   }
 
   const configAuthWrapper = {

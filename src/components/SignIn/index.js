@@ -1,37 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withRouter } from "react-router-dom";
 import './styles.scss';
 
 import Button from './../forms/Button';
-import { auth, signInWithGoogle } from './../../firebase/utils';
 import FormInput from './../forms/FormInput';
 import AuthWrapper from './../AuthWrapper';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { resetAllAuthForms, signInUser, signInWithGoogle } from './../../redux/User/user.actions';
+
+const mapState = ({ user }) => ({
+    signInSuccess: user.signInSuccess,
+});
 
 const SignIn = props => {
-
+    const { signInSuccess } = useSelector(mapState);
+    const dispatch = useDispatch();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    useEffect(() => {
+        if(signInSuccess) {
+            resetForm();
+            dispatch(resetAllAuthForms());
+            props.history.push('/');
+        }
+    }, [signInSuccess]);
 
     const resetForm = () => {
         setEmail('');
         setPassword('');
     }
 
-    const handleSubmit = async e => {
+    const handleSubmit = e => {
         e.preventDefault();
-
-        try {
-            await auth.signInWithEmailAndPassword(email, password);
-            resetForm();
-            props.history.push('/');
-        } catch (e) {
-            console.log(e);
-        }
+        dispatch(signInUser({ email, password }));        
     }
 
     const configAuthWrapper = {
         headline: 'Log In',
+    }
+
+    const handleGoogleSignIn = () => {
+        dispatch(signInWithGoogle());
     }
     return (
         <AuthWrapper {...configAuthWrapper}>
@@ -57,7 +68,7 @@ const SignIn = props => {
                             </Button>
                     <div className="socialSignIn">
                         <div className="row">
-                            <Button onClick={signInWithGoogle}>
+                            <Button onClick={handleGoogleSignIn}>
                                 Sign in with Google
                                     </Button>
                         </div>

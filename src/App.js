@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { auth, handleUserProfile } from './firebase/utils';
 
@@ -19,24 +19,23 @@ import WithAuth from './hoc/withAuth';
 import { setCurrentUser } from "./redux/User/user.actions";
 
 const App = props => {
-  
+  const dispatch = useDispatch();
   const { setCurrentUser, currentUser } = props;
 
   useEffect(() => {
-
     const authListener = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
         const userRef = await handleUserProfile(userAuth);
         userRef.onSnapshot(snapShot => {
-          setCurrentUser({
+          dispatch(setCurrentUser({
             id: snapShot.id,
             ...snapShot.data()
-          });
+          }));
         });
 
       }
 
-      setCurrentUser(userAuth);
+      dispatch(setCurrentUser(userAuth));
     });
 
     return () => {
